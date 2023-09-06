@@ -15,6 +15,8 @@ function App() {
           .catch(() => console.log('fetch fail'));
   }, []);
 
+  console.log(currentPage);
+
   return (
     <>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
@@ -47,6 +49,19 @@ function App() {
           </tbody>
         </table>
         }
+        <button
+        onClick={() => setCurrentPage(currentPage - 1)}
+        className='border-2 mx-1'
+        >
+          prev page
+          </button>
+        <button
+        onClick={() => setCurrentPage(currentPage + 1)}
+        className='border-2 mx-1'
+        >
+          next page
+        </button>
+        <div>current page: {currentPage}</div>
       </div>
     </>
   )
