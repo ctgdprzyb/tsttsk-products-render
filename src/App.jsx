@@ -4,6 +4,7 @@ import { fetchWorldState } from '../api/fetchData'
 
 function App() {
   const [products, setProducts] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchWorldState()
