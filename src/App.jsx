@@ -6,6 +6,7 @@ function App() {
   const [products, setProducts] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [filterQuery, setFilterQuery] = useState('placeholder');
 
   useEffect(() => {
     fetchProductList()
@@ -44,7 +45,18 @@ function App() {
   return (
     <>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
+
+      <input
+        className='mb-8 border-2 border-slate-600 rounded-md'
+        type="text"
+        value={filterQuery}
+        onChange={(event) => setFilterQuery(event.target.value)}
+        name="filter"
+        id="filter"
+      />
+
       <div className='border-double border-rose-700 border-8 rounded-md'>
+
 
         {/* THE PRODUCT TABLE */}
 
