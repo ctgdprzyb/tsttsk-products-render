@@ -9,11 +9,21 @@ function App() {
   useEffect(() => {
     fetchWorldState()
           .then(response => {
-            console.log('setting worldstate');
+            console.log('initial products fetch');
             setProducts(response);
           })
           .catch(() => console.log('fetch fail'));
   }, []);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    fetchWorldState((page - 1) * 10)
+      .then(response => {
+        console.log('fetching more products');
+        setProducts(response);
+      });
+  }
 
   console.log(currentPage);
 
@@ -50,13 +60,13 @@ function App() {
         </table>
         }
         <button
-        onClick={() => setCurrentPage(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         className='border-2 mx-1'
         >
           prev page
           </button>
         <button
-        onClick={() => setCurrentPage(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         className='border-2 mx-1'
         >
           next page
