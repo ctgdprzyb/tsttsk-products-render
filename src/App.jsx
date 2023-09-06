@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { fetchWorldState } from '../api/fetchData'
+import { fetchProductList } from '../api/fetchData'
 
 function App() {
   const [products, setProducts] = useState();
@@ -8,7 +8,7 @@ function App() {
   const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
-    fetchWorldState()
+    fetchProductList()
           .then(response => {
             console.log('initial products fetch');
             setProducts(response);
@@ -21,7 +21,7 @@ function App() {
     setProducts();
     setCurrentPage(page);
 
-    fetchWorldState((page - 1) * 10)
+    fetchProductList((page - 1) * 10)
       .then(response => {
         console.log('fetching more products');
         setProducts(response);
