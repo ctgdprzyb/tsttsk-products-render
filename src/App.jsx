@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { fetchProductList } from '../api/fetchData'
+import { fetchProductList, fetchProductsByName } from '../api/fetchData'
 
 function App() {
   const [products, setProducts] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
-  const [filterQuery, setFilterQuery] = useState('placeholder');
+  const [filterQuery, setFilterQuery] = useState('');
 
   useEffect(() => {
     fetchProductList()
@@ -29,8 +29,33 @@ function App() {
       });
   }
 
+  const handleSearch = (query) => {
+    setCurrentPage(1);
+    setFilterQuery(query);
+    setProducts();
+    if (query) {
+      fetchProductsByName(filterQuery)
+        .then(response => {
+          console.log('searching for products')
+          setProducts(response);
+          setTotalPages(Math.trunc(response.total / 10))
+          })
+          .catch(() => console.log('fetch fail'));
+      } else {
+      fetchProductList()
+        .then(response => {
+        console.log('initial products fetch');
+        setProducts(response);
+        setTotalPages(Math.trunc(response.total / 10))
+        })
+        .catch(() => console.log('fetch fail'));
+        }
+  }
+
   console.log(currentPage);
-  console.log('total pages vs total items ' + totalPages + ' ' + products?.total)
+  console.log(
+    'total pages vs total items ' + totalPages + ' ' + products?.total
+    )
 
   // const pages = [];
 
@@ -49,8 +74,9 @@ function App() {
       <input
         className='mb-8 border-2 border-slate-600 rounded-md'
         type="text"
+        placeholder='Filter by name...'
         value={filterQuery}
-        onChange={(event) => setFilterQuery(event.target.value)}
+        onChange={(event) => handleSearch(event.target.value)}
         name="filter"
         id="filter"
       />

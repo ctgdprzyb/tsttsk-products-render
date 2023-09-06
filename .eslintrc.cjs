@@ -12,6 +12,10 @@ module.exports = {
   settings: { react: { version: '18.2' } },
   plugins: ['react-refresh'],
   rules: {
+    'max-len': ['error', {
+      ignoreTemplateLiterals: true,
+      ignoreComments: true,
+    }],
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
