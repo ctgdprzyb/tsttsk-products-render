@@ -14,7 +14,7 @@ export async function fetchProductList(skippedProducts = 0) {
     })
 }
 
-export async function fetchProductsByName(query, skippedProducts = 0) {
+export async function fetchProductsByName(query = '', skippedProducts = 0) {
   return fetch(URL + '/search?q=' + query + '&limit=10&skip=' + skippedProducts)
     .then(response => {
       if (!response.ok) {

@@ -9,14 +9,14 @@ function App() {
   const [filterQuery, setFilterQuery] = useState('');
 
   useEffect(() => {
-    fetchProductList()
+    fetchProductsByName(filterQuery)
           .then(response => {
             console.log('initial products fetch');
             setProducts(response);
             setTotalPages(Math.trunc(response.total / 10))
           })
           .catch(() => console.log('fetch fail'));
-  }, []);
+  }, [filterQuery]);
 
   const handlePageChange = (page) => {
     setProducts();
@@ -31,8 +31,8 @@ function App() {
 
   const handleSearch = (query) => {
     setCurrentPage(1);
-    setFilterQuery(query);
     setProducts();
+    setFilterQuery(query);
     if (query) {
       fetchProductsByName(filterQuery)
         .then(response => {
