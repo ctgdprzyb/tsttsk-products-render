@@ -5,17 +5,20 @@ import { fetchWorldState } from '../api/fetchData'
 function App() {
   const [products, setProducts] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
 
   useEffect(() => {
     fetchWorldState()
           .then(response => {
             console.log('initial products fetch');
             setProducts(response);
+            setTotalPages(Math.trunc(response.total / 10))
           })
           .catch(() => console.log('fetch fail'));
   }, []);
 
   const handlePageChange = (page) => {
+    setProducts();
     setCurrentPage(page);
 
     fetchWorldState((page - 1) * 10)
@@ -26,13 +29,27 @@ function App() {
   }
 
   console.log(currentPage);
+  console.log('total pages vs total items ' + totalPages + ' ' + products?.total)
+
+  const pages = [];
+
+  if (products) {
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+      console.log('pages lgnth' + (pages.length + 1));
+    }
+  }
+
 
   return (
     <>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
       <div className='border-double border-rose-700 border-8 rounded-md'>
+
+        {/* THE PRODUCT TABLE */}
+
         {!products ? <p>Loading...</p> :
-        <table className='table-auto w-full'>
+        <table className='table-auto w-full mb-4'>
           <thead className='bg-slate-400'>
             <tr>
               <th>ID</th>
@@ -59,19 +76,36 @@ function App() {
           </tbody>
         </table>
         }
-        <button
+
+        {/* THE PAGINATION */}
+
+        {pages.map(page => 
+          <button
+          key={page}
+          onClick={() => handlePageChange(page)}
+          className='border mx-1 w-8'
+          >
+            {page}
+          </button>
+        )}
+        
+        {/* <button
         onClick={() => handlePageChange(currentPage - 1)}
         className='border-2 mx-1'
         >
           prev page
-          </button>
+        </button>
         <button
         onClick={() => handlePageChange(currentPage + 1)}
         className='border-2 mx-1'
         >
           next page
-        </button>
+        </button> */}
+
+        {/* DETAILS */}
+
         <div>current page: {currentPage}</div>
+        <div>total products: {products ? products.total : 'none'}</div>
       </div>
     </>
   )
