@@ -5,7 +5,7 @@ import './App.css'
 import { fetchWorldState } from '../api/fetchData'
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [products, setProducts] = useState();
 
   useEffect(() => {
     fetchWorldState()
