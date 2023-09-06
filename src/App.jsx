@@ -31,14 +31,14 @@ function App() {
   console.log(currentPage);
   console.log('total pages vs total items ' + totalPages + ' ' + products?.total)
 
-  const pages = [];
+  // const pages = [];
 
-  if (products) {
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-      console.log('pages lgnth' + (pages.length + 1));
-    }
-  }
+  // if (products) {
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     pages.push(i);
+  //     console.log('pages lgnth' + (pages.length + 1));
+  //   }
+  // }
 
 
   return (
@@ -79,13 +79,13 @@ function App() {
 
         {/* THE PAGINATION */}
 
-        {pages.map(page => 
+        {Array.from({length: totalPages}).map((_, index) => 
           <button
-          key={page}
-          onClick={() => handlePageChange(page)}
+          key={index}
+          onClick={() => handlePageChange(index + 1)}
           className='border mx-1 w-8'
           >
-            {page}
+            {index + 1}
           </button>
         )}
         
