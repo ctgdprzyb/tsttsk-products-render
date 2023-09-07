@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
-import { fetchProductList, fetchProductsByName } from '../utils/fetchData'
-import { debounce, useDebounce } from '../utils/debounce';
+import { fetchProductsByName } from '../utils/fetchData'
+import { useDebounce } from '../utils/debounce';
 
 function App() {
   const [products, setProducts] = useState();
