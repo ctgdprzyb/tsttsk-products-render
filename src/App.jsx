@@ -1,71 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
-import { fetchProductList, fetchProductsByName } from '../api/fetchData'
+import { fetchProductList, fetchProductsByName } from '../utils/fetchData'
+import { debounce, useDebounce } from '../utils/debounce';
 
 function App() {
   const [products, setProducts] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [inputValue, setInputValue] = useState('');
   const [filterQuery, setFilterQuery] = useState('');
 
   useEffect(() => {
     fetchProductsByName(filterQuery)
-          .then(response => {
-            console.log('initial products fetch');
-            setProducts(response);
-            setTotalPages(Math.trunc(response.total / 10))
-          })
-          .catch(() => console.log('fetch fail'));
+    .then(response => {
+      setProducts(response);
+      setTotalPages(Math.trunc((response.total - 1) / 10 + 1))
+    })
+    .catch(() => console.log('fetch fail'));
   }, [filterQuery]);
 
   const handlePageChange = (page) => {
     setProducts();
     setCurrentPage(page);
-
-    fetchProductList((page - 1) * 10)
-      .then(response => {
-        console.log('fetching more products');
-        setProducts(response);
-      });
+    
+    fetchProductsByName(filterQuery, (page - 1) * 10)
+    .then(response => {
+      setProducts(response);
+    });
   }
-
-  const handleSearch = (query) => {
+  
+  const debouncedFetch = useDebounce(() => {
     setCurrentPage(1);
     setProducts();
-    setFilterQuery(query);
-    if (query) {
-      fetchProductsByName(filterQuery)
-        .then(response => {
-          console.log('searching for products')
-          setProducts(response);
-          setTotalPages(Math.trunc(response.total / 10))
-          })
-          .catch(() => console.log('fetch fail'));
-      } else {
-      fetchProductList()
-        .then(response => {
-        console.log('initial products fetch');
-        setProducts(response);
-        setTotalPages(Math.trunc(response.total / 10))
-        })
-        .catch(() => console.log('fetch fail'));
-        }
+    setFilterQuery(inputValue);
+  })
+
+  const handleSearch = (query) => {
+    setInputValue(query);
+    debouncedFetch();
   }
-
-  console.log(currentPage);
-  console.log(
-    'total pages vs total items ' + totalPages + ' ' + products?.total
-    )
-
-  // const pages = [];
-
-  // if (products) {
-  //   for (let i = 1; i <= totalPages; i++) {
-  //     pages.push(i);
-  //     console.log('pages lgnth' + (pages.length + 1));
-  //   }
-  // }
-
 
   return (
     <>
@@ -75,7 +48,7 @@ function App() {
         className='mb-8 border-2 border-slate-600 rounded-md'
         type="text"
         placeholder='Filter by name...'
-        value={filterQuery}
+        value={inputValue}
         onChange={(event) => handleSearch(event.target.value)}
         name="filter"
         id="filter"
