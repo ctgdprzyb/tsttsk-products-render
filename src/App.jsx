@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { fetchProductsByName } from '../utils/fetchData'
+import { deleteProduct, fetchProductsByName } from '../utils/fetchData'
 import { useDebounce } from '../utils/debounce';
 import { ProductDetails } from './components/productDetails';
 
@@ -42,6 +42,22 @@ function App() {
     debouncedFetch();
   }
 
+  const handleDeletion = (id) => {
+    deleteProduct(id)
+      .then(response => {
+        console.log(response);
+        const newProdList = products.products.filter(
+          prod => prod.id !== id
+        );
+        
+        setProducts({
+          ...products,
+          products: newProdList
+        })
+      })
+      .catch(() => console.log('delete fail'));
+  }
+
   return (
     <>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
@@ -70,23 +86,25 @@ function App() {
         <table className='table-auto w-full mb-4'>
           <thead className='bg-slate-400'>
             <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Price</th>
-              <th>Actions</th>
+              <th className='border-x border-rose-700'>ID</th>
+              <th className='border-x border-rose-700'>Title</th>
+              <th className='border-x border-rose-700'>Price</th>
+              <th className='border-x border-rose-700'>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className='bg-slate-200'>
             {products.products.map((product) => {
               return (<tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.title}</td>
-                <td>{product.price}</td>
-                <td className='text-center'>
+                <td className='border-rose-600 border py-1'>{product.id}</td>
+                <td className='border-rose-600 border py-1'>{product.title}</td>
+                <td className='border-rose-600 border py-1'>{product.price}</td>
+                <td className='border-rose-600 border py-1 text-center'>
                   <select
+                  className='bg-slate-300 rounded-sm'
                   name="Actions"
                   id="actions"
-                  value={""}>
+                  value={""}
+                  readOnly>
                     <option value="">--</option>
 
                     <option
@@ -96,7 +114,7 @@ function App() {
 
                     <option
                     value="delete"
-                    onClick={() => console.log('delete lol')}
+                    onClick={() => handleDeletion(product.id)}
                     >
                       Delete
                     </option>
@@ -114,7 +132,7 @@ function App() {
           <button
           key={index}
           onClick={() => handlePageChange(index + 1)}
-          className='border mx-1 w-8'
+          className='border mx-1 w-8 rounded-xl'
           >
             {index + 1}
           </button>
