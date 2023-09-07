@@ -19,14 +19,14 @@ export function ProductDetails({
   className="h-full w-full bg-opacity-80 absolute inset-0 bg-black flex"
   >
     <div className="
-    max-w-lg align-middle p-5 m-auto opacity rounded-md bg-white max-h-96"
+    max-w-lg relative align-middle p-5 m-auto rounded-md bg-white max-h-96"
     >
       {prodDetails
       ? <>
       <div className="flex justify-between">
         <h2 className="text-2xl text-left">{prodDetails.title}</h2>
         <button
-        className="relative text-right -top-4 -right-2"
+        className="absolute text-right top-1 right-4"
           onClick={() => setInspectedProduct(0)}
         >
           x
