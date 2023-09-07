@@ -1,3 +1,5 @@
+import { func } from "prop-types";
+
 const URL = 'https://dummyjson.com/products';
 
 // 'https://dummyjson.com/products?limit=10&skip=10&select=title,price'
@@ -34,6 +36,17 @@ export async function fetchProductDetails(id = '') {
     .then(response => {
       if (!response.ok) {
         throw new Error('cant fetch');
+      }
+
+      return response.json();
+    })
+}
+
+export async function deleteProduct(id = '') {
+  return fetch(URL + '/' + id, {method: 'DELETE'})
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('cant delete');
       }
 
       return response.json();
