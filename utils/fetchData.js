@@ -1,5 +1,3 @@
-import { func } from "prop-types";
-
 const URL = 'https://dummyjson.com/products';
 
 // 'https://dummyjson.com/products?limit=10&skip=10&select=title,price'

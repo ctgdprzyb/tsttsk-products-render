@@ -3,6 +3,7 @@ import './App.css'
 import { deleteProduct, fetchProductsByName } from '../utils/fetchData'
 import { useDebounce } from '../utils/debounce';
 import { ProductDetails } from './components/productDetails';
+import { NoConnectionModal } from './components/noConnectionModal';
 
 function App() {
   const [products, setProducts] = useState();
@@ -11,6 +12,7 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [filterQuery, setFilterQuery] = useState('');
   const [inspectedProduct, setInspectedProduct] = useState(null);
+  const [errorStatus, setErrorStatus] = useState(false);
 
   useEffect(() => {
     fetchProductsByName(filterQuery)
@@ -18,7 +20,7 @@ function App() {
       setProducts(response);
       setTotalPages(Math.trunc((response.total - 1) / 10 + 1))
     })
-    .catch(() => console.log('fetch fail'));
+    .catch(() => setErrorStatus(true));
   }, [filterQuery]);
 
   const handlePageChange = (page) => {
@@ -55,16 +57,20 @@ function App() {
           products: newProdList
         })
       })
-      .catch(() => console.log('delete fail'));
+      .catch(() => setErrorStatus(true));
   }
 
   return (
     <>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
 
+    {errorStatus ? <NoConnectionModal setErrorStatus={setErrorStatus} /> : null}
+
       {inspectedProduct
       ? <ProductDetails
-        product={inspectedProduct} setInspectedProduct={setInspectedProduct} />
+        product={inspectedProduct}
+        setInspectedProduct={setInspectedProduct}
+        setErrorStatus={setErrorStatus} />
       : null}
 
       <input
@@ -83,22 +89,28 @@ function App() {
         {/* THE PRODUCT TABLE */}
 
         {!products ? <p>Loading...</p> :
-        <table className='table-auto w-full mb-4'>
+        <table className='table-auto w-full mb-4 border-collapse'>
           <thead className='bg-slate-400'>
             <tr>
-              <th className='border-x border-rose-700'>ID</th>
-              <th className='border-x border-rose-700'>Title</th>
-              <th className='border-x border-rose-700'>Price</th>
-              <th className='border-x border-rose-700'>Actions</th>
+              <th className='border-x border-rose-600'>ID</th>
+              <th className='border-x border-rose-600'>Title</th>
+              <th className='border-x border-rose-600'>Price</th>
+              <th className='border-x border-rose-600'>Actions</th>
             </tr>
           </thead>
           <tbody className='bg-slate-200'>
             {products.products.map((product) => {
               return (<tr key={product.id}>
-                <td className='border-rose-600 border py-1'>{product.id}</td>
+                <td
+                className='border-rose-600 border py-1 border-l-0'
+                >
+                  {product.id}
+                </td>
                 <td className='border-rose-600 border py-1'>{product.title}</td>
                 <td className='border-rose-600 border py-1'>{product.price}</td>
-                <td className='border-rose-600 border py-1 text-center'>
+                <td
+                className='border-rose-600 border py-1 border-r-0 text-center'
+                >
                   <select
                   className='bg-slate-300 rounded-sm'
                   name="Actions"

@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react"
 import { fetchProductDetails } from "../../utils/fetchData"
 
-export function ProductDetails({ product, setInspectedProduct }) {
+export function ProductDetails({
+  product, setInspectedProduct, setErrorStatus
+  }) {
   const [prodDetails, setProdDetails] = useState();
 
   useEffect(() => {
     fetchProductDetails(product)
       .then(response => setProdDetails(response))
+      .catch(() => setErrorStatus(true))
   }, [product])
 
   return (
