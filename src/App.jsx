@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import './App.css'
 import { deleteProduct, fetchProductsByName } from '../utils/fetchData'
 import { useDebounce } from '../utils/debounce';
 import { ProductDetails } from './components/productDetails';
@@ -61,7 +60,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className='max-w-7xl mx-auto text-center p-8'>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
 
     {errorStatus ? <NoConnectionModal setErrorStatus={setErrorStatus} /> : null}
@@ -149,26 +148,11 @@ function App() {
             {index + 1}
           </button>
         )}
-        
-        {/* <button
-        onClick={() => handlePageChange(currentPage - 1)}
-        className='border-2 mx-1'
-        >
-          prev page
-        </button>
-        <button
-        onClick={() => handlePageChange(currentPage + 1)}
-        className='border-2 mx-1'
-        >
-          next page
-        </button> */}
-
-        {/* DETAILS */}
 
         <div>current page: {currentPage}</div>
         <div>total products: {products ? products.total : 'none'}</div>
       </div>
-    </>
+    </div>
   )
 }
 
