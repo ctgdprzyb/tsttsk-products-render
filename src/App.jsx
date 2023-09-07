@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { fetchProductsByName } from '../utils/fetchData'
 import { useDebounce } from '../utils/debounce';
+import { ProductDetails } from './components/productDetails';
 
 function App() {
   const [products, setProducts] = useState();
@@ -9,6 +10,7 @@ function App() {
   const [totalPages, setTotalPages] = useState();
   const [inputValue, setInputValue] = useState('');
   const [filterQuery, setFilterQuery] = useState('');
+  const [inspectedProduct, setInspectedProduct] = useState(null);
 
   useEffect(() => {
     fetchProductsByName(filterQuery)
@@ -44,6 +46,11 @@ function App() {
     <>
       <h1 className='text-3xl font-bold mb-8'>Products app</h1>
 
+      {inspectedProduct
+      ? <ProductDetails
+        product={inspectedProduct} setInspectedProduct={setInspectedProduct} />
+      : null}
+
       <input
         className='mb-8 border-2 border-slate-600 rounded-md'
         type="text"
@@ -76,10 +83,23 @@ function App() {
                 <td>{product.title}</td>
                 <td>{product.price}</td>
                 <td className='text-center'>
-                  <select name="Actions" id="actions">
+                  <select
+                  name="Actions"
+                  id="actions"
+                  value={""}>
                     <option value="">--</option>
-                    <option value="info">Info</option>
-                    <option value="delete">Delete</option>
+
+                    <option
+                    value="info"
+                    onClick={() => setInspectedProduct(product.id)}
+                    >Info</option>
+
+                    <option
+                    value="delete"
+                    onClick={() => console.log('delete lol')}
+                    >
+                      Delete
+                    </option>
                   </select>
                 </td>
               </tr>)
