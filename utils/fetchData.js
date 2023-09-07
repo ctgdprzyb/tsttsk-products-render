@@ -28,3 +28,14 @@ export async function fetchProductsByName(query = '', skippedProducts = 0) {
       return response.json();
     })
 }
+
+export async function fetchProductDetails(id = '') {
+  return fetch(URL + '/' + id)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('cant fetch');
+      }
+
+      return response.json();
+    })
+}
